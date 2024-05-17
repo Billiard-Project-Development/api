@@ -12,7 +12,6 @@ class UserQueryModel {
   validateParamFindByEmail(user) {
     const userSchema = joi.object({
       email: joi.string().email().required(),
-      password: joi.string().optional(),
     });
     return userSchema.validate(user);
   }

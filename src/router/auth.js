@@ -24,7 +24,7 @@ module.exports = (app) => {
     try {
       var response = await auth.register(req, res);
 
-      util.response(res, response, "Success", 200, true);
+      util.response(res, response, "Registrasi Success", 200, true);
     } catch (error) {
       util.handleError(req, res, error);
     }

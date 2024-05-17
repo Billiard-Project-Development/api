@@ -11,15 +11,15 @@ const TokenGenerator = require("./token");
 class Auth {
   constructor() {}
   async register(req, res) {
-    const existingUser = queryHandler.findUserByEmail(req);
+    const existingUser = await queryHandler.findUserByEmail(req.body);
 
-    if (existingUser) {
+    if (existingUser[0]) {
       throw new ErrorHandler.BadRequestError("Email Already Registered");
     } else {
       try {
-        await commandHandler.createUser(req.body);
+        return await commandHandler.createUser(req.body);
       } catch (error) {
-        ErrorHandler.ServerError(error);
+        throw new ErrorHandler.ServerError();
       }
     }
   }
@@ -43,7 +43,7 @@ class Auth {
       var response = tokenGenerator.getAuthToken();
       return response;
     } catch (error) {
-      throw new ErrorHandler.ServerError(error);
+      throw new ErrorHandler.ServerError();
     }
   }
   async refreshToken(req, res) {
@@ -56,7 +56,8 @@ class Auth {
         token,
         apiConstants.TOKEN_SECRET.REFRESH_TOKEN,
         (err, user) => {
-          if (err) throw new ErrorHandler.ForbiddenError("Forbidden, Invalid Token");
+          if (err)
+            throw new ErrorHandler.ForbiddenError("Forbidden, Invalid Token");
           return user;
         }
       );
@@ -64,7 +65,7 @@ class Auth {
       const accessToken = await tokenGenerator.generateAccessToken();
       return { newToken: accessToken };
     } catch (error) {
-      throw new ErrorHandler.ServerError(error);
+      throw new ErrorHandler.ServerError();
     }
   }
 }
