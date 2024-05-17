@@ -25,22 +25,20 @@ class Auth {
   }
   async login(req, res) {
     const { email, password } = req.body;
-    try {
-      var user = await queryHandler.findUserByEmail(req.body);
-      if (!user) {
-        throw new ErrorHandler.BadRequestError(
-          "Email or Password is Incorrect"
-        );
-      }
+    var user = await queryHandler.findUserByEmail(req.body);
+    if (!user[0]) {
+      throw new ErrorHandler.BadRequestError("Email or Password is Incorrect");
+    } else if (user) {
       const validPassword = await bcrypt.compare(password, user[0].password);
-      if (!validPassword) {
+      if (!validPassword)
         throw new ErrorHandler.BadRequestError(
           "Email or Password is Incorrect"
         );
-      }
+    }
+    try {
       const tokenGenerator = new TokenGenerator({ email: user[0].email });
 
-      var response = tokenGenerator.getAuthToken();
+      var response = await tokenGenerator.getAuthToken();
       return response;
     } catch (error) {
       throw new ErrorHandler.ServerError();
