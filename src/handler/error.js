@@ -1,21 +1,19 @@
-const { apiConstants } = require("../utils");
-
-require("../utils/index");
+const { apiConstants, Utils } = require("../utils/index");
 
 class ErrorHandler extends Error {
   constructor(msg, statusCode) {
-    super(msg);
+    super(msg,statusCode);
     this.statusCode = statusCode;
   }
 }
 
 class UnauthorizedError extends ErrorHandler {
   constructor(msg = "Unauthorized") {
-    super(msg);
+    super(msg, apiConstants.RESPONSE_CODES.UNAUTHORIZED);
   }
 }
 class BadRequestError extends ErrorHandler {
-  constructor(msg = "Bad Request") {
+  constructor(msg = "Bad Request",) {
     super(msg, apiConstants.RESPONSE_CODES.BAD_REQUEST);
   }
 }
@@ -36,7 +34,7 @@ class ServerError extends ErrorHandler {
 }
 class TooManyRequestError extends ErrorHandler {
   constructor(msg = "Too Many Request") {
-    super(msg, apiConstants.RESPONSE_CODES.SERVER_ERROR);
+    super(msg, apiConstants.RESPONSE_CODES.TOO_MANY_REQUEST);
   }
 }
 

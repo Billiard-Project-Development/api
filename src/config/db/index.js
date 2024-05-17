@@ -1,30 +1,28 @@
 const pg = require("pg");
 const { Pool, Client } = pg;
+require("dotenv").config();
+const { DB_ENVIRONMENT, Utils, apiConstants } = require("../../utils/index");
 class DB {
-  constructor() {
-    this.user = "postgres";
-    this.host = "localhost";
-    this.database = "bdp_db";
-    this.password = "rahasia007";
-    this.port = 5432;
+  constructor(
+    user = DB_ENVIRONMENT.DB_USER,
+    host = DB_ENVIRONMENT.DB_HOST,
+    database = DB_ENVIRONMENT.DB_DATABASE,
+    password = DB_ENVIRONMENT.DB_PASS,
+    port = DB_ENVIRONMENT.DB_PORT
+  ) {
+    this.user = user;
+    this.host = host;
+    this.database = database;
+    this.password = password;
+    this.port = port;
     this.db = new Pool({
-      user: "postgres",
-      host: "localhost",
-      database: "bdp_db",
-      port: 5432,
-      password: "rahasia007",
-    });
-  }
-  getConfig() {
-    return {
       user: this.user,
       host: this.host,
       database: this.database,
       password: this.password,
       port: this.port,
-    };
+    });
   }
-
   async connect() {
     try {
       await this.db.connect();

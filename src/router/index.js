@@ -1,12 +1,15 @@
-const { UserModel } = require("../api/user/models/user");
-const validator = require("../middleware/validation");
-const userRoute = require("./user");
-
+const { Utils } = require("../utils/index");
+const { ErrorHandler } = require("../handler/error");
+const util = new Utils();
+const bodyParser = require("body-parser");
+const { routing } = require("../middleware/validation");
 module.exports = (app) => {
-  app.use("/api", (req, res, next) => {
-    if (req.path.includes("/user")) {
-      userRoute(app);
-    }
+  // app.get("*", function (req, res) {
+  //   return util.handleError(req, res, new ErrorHandler.NotFoundError());
+  // });
+  app.use(bodyParser.json());
+  app.use("/api/v1", (req, res, next) => {
+    routing(req, res, app);
     next();
   });
   app.get("/", (req, res) => res.send("<h1>WELCOME GES</h1>"));

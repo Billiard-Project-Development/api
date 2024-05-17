@@ -1,7 +1,12 @@
-const { apiConstants } = require("./constant");
+const { apiConstants, DB_ENVIRONMENT } = require("./constant");
 
 require("./constant");
 class Utils {
+  loggedInResponse(){
+    var response = {
+      
+    }
+  }
   response(res, data, message, status, success) {
     const responseObj = {
       success: success,
@@ -11,27 +16,17 @@ class Utils {
     };
     res.json(responseObj);
   }
-  handleError(res, message, statusCode) {
-    switch (statusCode) {
-      case apiConstants.RESPONSE_CODES.SERVER_ERROR:
-        return res.status(statusCode).json({
-          success: false,
-          message: message,
-          statusCode: statusCode,
-        });
-      case apiConstants.RESPONSE_CODES.BAD_REQUEST:
-        return res.status(statusCode).json({
-          success: false,
-          message: message,
-          statusCode: statusCode,
-        });
-      default:
-        return res.status(statusCode).json({
-          success: false,
-          message: message,
-          statusCode: statusCode,
-        });
-    }
+  handleError(req, res, err) {
+    if (!res) return false;
+    err = err || {};
+
+    const msg = err.message
+      ? err.message
+      : apiConstants.FAILED_MESSAGE.INTERNAL_SERVER_ERROR;
+    const code = err.statusCode
+      ? err.statusCode
+      : apiConstants.RESPONSE_CODES.SERVER_ERROR;
+    this.response(res, {}, msg, code, false);
   }
   responseForValidation(res, errorArray, success, code = 400) {
     const responseObj = {
@@ -46,12 +41,5 @@ class Utils {
 module.exports = {
   Utils,
   apiConstants,
+  DB_ENVIRONMENT,
 };
-// module.exports = {
-//   apiConstants,
-//   apiEndpoints,
-//   apiFailureMessage,
-//   apiSuccessMessage,
-//   genericConstants,
-//   stringConstants,
-// };
