@@ -1,5 +1,12 @@
 require("dotenv").config();
 const apiConstants = {
+  MIDTRANS_KEY: {
+    MERCHANT_ID: process.env.MIDTRANS_MERCHANT_ID,
+    SERVER_KEY: process.env.MIDTRANS_SERVER_KEY,
+    CLIENT_KEY: process.env.MIDTRANS_CLIENT_KEY,
+    API_URL: process.env.MIDTRANS_SANDBOX_API,
+    SERVER_KEY_ENCODED: process.env.MIDTRANS_SERVER_KEY_ENCODED,
+  },
   TOKEN_SECRET: {
     ACCESS_TOKEN: process.env.ACCESS_TOKEN_SECRET,
     REFRESH_TOKEN: process.env.REFRESH_TOKEN_SECRET,
@@ -27,9 +34,6 @@ const apiConstants = {
   CONTENT_TYPE: {
     URL_ENCODE: "application/x-www-form-urlencoded",
   },
-  WEBSERVICE_PATH: {
-    SYNC_ATTENDANCE: "sync-attendance/",
-  },
 
   RESPONSE_STATUS: {
     SUCCESS: true,
@@ -47,16 +51,6 @@ const apiConstants = {
     GONE: 410,
     UNSUPPORTED_MEDIA_TYPE: 415,
     TOO_MANY_REQUEST: 429,
-  },
-  LOG_LEVEL_TYPE: {
-    INFO: "info",
-    ERROR: "error",
-    WARN: "warn",
-    VERBOSE: "verbose",
-    DEBUG: "debug",
-    SILLY: "silly",
-    FUNCTIONAL: "functional",
-    HTTP_REQUEST: "http request",
   },
   SUCCESS_MESSAGE: {
     FETCH_SUCCESS: "Information fetched successfully",

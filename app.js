@@ -19,6 +19,7 @@ class App {
         }
         console.log(`server is running on ${port}`);
       });
+
       router(app);
     });
   }

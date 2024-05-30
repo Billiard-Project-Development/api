@@ -11,9 +11,6 @@ const bodyParser = require("body-parser");
 const authenticator = require("../middleware/authentication");
 module.exports = (app) => {
   app.use(bodyParser.json());
-  // app.get("*", function (req, res) {
-  //   return util.handleError(req, res, new ErrorHandler.NotFoundError());
-  // });
 
   app.post("/api/v1/user/create", async (req, res) => {
     try {
@@ -34,15 +31,9 @@ module.exports = (app) => {
     authenticator.authenticateToken,
     async (req, res) => {
       const params = req.query;
-
       try {
         var users;
-        if (typeof params !== "undefined" && params.isNotEmpty) {
-          users = await queryHandler.findUserByNameOrEmail(params);
-        } else {
-          users = await queryHandler.findAll();
-        }
-
+        users = await queryHandler.findUserByNameOrEmail(params);
         util.response(res, users, "Success", 200, true);
       } catch (error) {
         util.handleError(req, res, error);

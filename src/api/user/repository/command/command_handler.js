@@ -3,7 +3,7 @@ const UserModel = require("./command_model");
 const { DB } = require("../../../../config/db/index");
 const UserCommand = require("./command");
 const bcrypt = require("bcryptjs");
-class CommandHandler {
+class UserCommandHandler {
   constructor() {
     this.db = new DB();
     this.model = new UserModel();
@@ -16,7 +16,7 @@ class CommandHandler {
     } else {
       const hashedPassword = await bcrypt.hash(body.password, 10);
       const query = {
-        text: "INSERT INTO user_tb(user_id,nama,email,noHp,password,role) VALUES($1, $2, $3, $4, $5, $6)",
+        text: "INSERT INTO user_tb(user_id,nama,email,no_hp,password,role) VALUES($1, $2, $3, $4, $5, $6)",
         values: [
           body.user_id,
           body.nama,
@@ -45,4 +45,4 @@ class CommandHandler {
   }
 }
 
-module.exports = CommandHandler;
+module.exports = UserCommandHandler;

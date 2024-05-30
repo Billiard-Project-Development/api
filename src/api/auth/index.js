@@ -6,7 +6,7 @@ const queryHandler = new QueryHandler();
 const commandHandler = new CommandHandler();
 const { ErrorHandler } = require("../../handler/error");
 const { apiConstants } = require("../../utils/index");
-const TokenGenerator = require("./token");
+const TokenGenerator = require("./jwt_token");
 
 class Auth {
   constructor() {}
@@ -43,6 +43,11 @@ class Auth {
     } catch (error) {
       throw new ErrorHandler.ServerError();
     }
+  }
+  async logout(req, res) {
+    const { email, password } = req.body;
+    var user = await queryHandler.findUserByEmail(req.body);
+    
   }
   async refreshToken(req, res) {
     const { token, email } = req.body;

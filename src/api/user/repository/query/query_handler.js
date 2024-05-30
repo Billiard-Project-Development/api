@@ -3,7 +3,7 @@ const { DB } = require("../../../../config/db");
 const UserQueryModel = require("./query_model");
 const UserQuery = require("./query");
 const { text } = require("body-parser");
-class QueryHandler {
+class UserQueryHandler {
   constructor() {
     this.db = new DB();
     this.model = new UserQueryModel();
@@ -49,18 +49,26 @@ class QueryHandler {
       throw new ErrorHandler.BadRequestError(error);
     } else {
       try {
-        let sql = `SELECT * FROM user_tb WHERE `;
+        let sql = `SELECT * FROM user_tb  `;
         let count = 0;
         let value = [];
         let conditions = [];
 
         if (typeof param.email !== "undefined") {
-          conditions.push(`email ILIKE  $${conditions.length + 1}`);
+          if (count == 0) {
+            conditions.push(`WHERE email ILIKE  $${conditions.length + 1}`);
+          } else {
+            conditions.push(`email ILIKE  $${conditions.length + 1}`);
+          }
           value.push(`%${param.email}%`);
           count++;
         }
         if (typeof param.nama !== "undefined") {
-          conditions.push(`nama ILIKE  $${conditions.length + 1}`);
+          if (count == 0) {
+            conditions.push(`WHERE nama ILIKE  $${conditions.length + 1}`);
+          } else {
+            conditions.push(`nama ILIKE  $${conditions.length + 1}`);
+          }
           value.push(`%${param.nama}%`);
           count++;
         }
@@ -70,6 +78,7 @@ class QueryHandler {
           text: sql,
           values: value,
         };
+
         const query = new UserQuery(this.db.db, querySql);
         var response = await query.getUser();
         return response;
@@ -80,4 +89,4 @@ class QueryHandler {
   }
 }
 
-module.exports = QueryHandler;
+module.exports = UserQueryHandler;

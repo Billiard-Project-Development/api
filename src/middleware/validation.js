@@ -1,6 +1,8 @@
 const utils = require("../utils");
 const userRoute = require("../router/user");
 const authRoute = require("../router/auth");
+const bookingRoute = require("../router/booking");
+
 const validate = async (schema, req, res, next) => {
   try {
     await schema.validate(req.body, { abortEarly: false });
@@ -14,8 +16,9 @@ const routing = async (req, res, app) => {
     userRoute(app);
   }
   if (req.path.includes("/booking")) {
+    bookingRoute(app);
   }
-  if (req.path.includes("auth")) {
+  if (req.path.includes("/auth")) {
     authRoute(app);
   }
 };
