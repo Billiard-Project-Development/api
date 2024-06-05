@@ -1,29 +1,48 @@
 const errorHandler = require("../../../../handler/error").ErrorHandler;
-const { validateUser, UserModel } = require("../../models/user");
-
+const UserModel = require("./command_model");
+const { DB } = require("../../../../config/db/index");
+const UserCommand = require("./command");
+const bcrypt = require("bcryptjs");
 class UserCommandHandler {
-  constructor(command, db) {
-    this.command = command;
-    this.db = db;
+  constructor() {
+    this.db = new DB();
+    this.model = new UserModel();
   }
-  static async createNewUser(command) {
-    const { error } = validateUser(command);
+
+  async createUser(body) {
+    const { error } = this.model.validateUserInput(body);
     if (error) {
-      throw new errorHandler.BadRequestError();
-    }
-    const query = "INSERT INTO user_tb(nama,email,noHp,password)";
+      throw new errorHandler.BadRequestError(error);
+    } else {
+      const hashedPassword = await bcrypt.hash(body.password, 10);
+      const query = {
+        text: "INSERT INTO user_tb(user_id,nama,email,no_hp,password,role) VALUES($1, $2, $3, $4, $5, $6)",
+        values: [
+          body.user_id,
+          body.nama,
+          body.email,
+          body.noHp,
+          hashedPassword,
+          body.role,
+        ],
+      };
+      const command = new UserCommand(this.db.db, query);
+      try {
+        await command
+          .create()
 
-    const { nama, email, noHp, password } = command;
-    try {
-      const res = await db.query(query, [nama, email, noHp, password]);
-
-      return res.rows[0];
-    } catch (err) {
-      throw new errorHandler.ServerError();
+          .catch((err) => {
+            throw new errorHandler.ServerError(err);
+          });
+        return {
+          nama: body.nama,
+          email: body.email,
+        };
+      } catch (error) {
+        throw new errorHandler.ServerError(error);
+      }
     }
   }
 }
 
-module.exports = {
-  CreateUserCommandHandler,
-};
+module.exports = UserCommandHandler;

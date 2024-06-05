@@ -1,10 +1,17 @@
-const { userSchema } = require("../../models/user");
-const db = require("../../../../config/db/index");
+const { ErrorHandler } = require("../../../../handler/error");
+
 class UserCommand {
-  constructor() {
+  constructor(db, query) {
     this.db = db;
+    this.query = query;
   }
-  static async createUser(account) {
-    return await userSchema;
+  async create() {
+    try {
+      const res = await this.db.query(this.query);
+      return res;
+    } catch (err) {
+      throw new ErrorHandler.ServerError(err);
+    }
   }
 }
+module.exports = UserCommand;
