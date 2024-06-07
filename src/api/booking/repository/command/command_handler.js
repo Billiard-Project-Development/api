@@ -1,12 +1,10 @@
 const { DB } = require("../../../../config/db");
-const { Utils, apiConstants } = require("../../../../utils");
 const { ErrorHandler } = require("../../../../handler/error");
 const UserQueryHandler = require("../../../user/repository/query/query_handler");
 const BookingCommandModel = require("./command_model");
 const MidtransClient = require("../../../../service/midtrans_handler");
 const BookingCommand = require("./command");
 const model = new BookingCommandModel();
-const util = new Utils();
 
 class BookingCommandHandler {
   constructor() {

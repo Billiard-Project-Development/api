@@ -1,6 +1,5 @@
 const fetch = require("node-fetch");
-const { Utils, apiConstants } = require("../utils");
-const util = new Utils();
+const { util, apiConstants } = require("../utils");
 const midtransClient = require("midtrans-client");
 const url = "https://api.sandbox.midtrans.com/v2/charge";
 class MidtransClient {

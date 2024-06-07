@@ -1,7 +1,7 @@
 const pg = require("pg");
 const { Pool, Client } = pg;
 require("dotenv").config();
-const { DB_ENVIRONMENT, Utils, apiConstants } = require("../../utils/index");
+const { DB_ENVIRONMENT, util, apiConstants } = require("../../utils/index");
 class DB {
   constructor(
     user = DB_ENVIRONMENT.DB_USER,

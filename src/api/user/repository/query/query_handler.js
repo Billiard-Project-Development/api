@@ -21,6 +21,7 @@ class UserQueryHandler {
   }
 
   async findUserByEmail(param) {
+    if (param == null) throw new ErrorHandler.BadRequestError("Params null");
     const { error } = this.model.validateParamFindByEmail({
       email: param.email,
     });

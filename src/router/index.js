@@ -1,11 +1,13 @@
-const { Utils } = require("../utils/index");
 const { ErrorHandler } = require("../handler/error");
-const util = new Utils();
+const cookieParser = require("cookie-parser");
+
 const bodyParser = require("body-parser");
 const { routing } = require("../middleware/validation");
 module.exports = (app) => {
+  app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
-  app.use("/api/v1", (req, res, next) => {
+  app.use(cookieParser());
+  app.use("/v1", (req, res, next) => {
     routing(req, res, app);
     next();
   });

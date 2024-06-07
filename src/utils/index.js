@@ -105,9 +105,33 @@ class Utils {
     };
     return options;
   }
+  queryGetAllSQL(table) {
+    switch (table) {
+      case "produk":
+        return `SELECT * FROM product_tb`;
+      case "user":
+        return `SELECT * FROM usert_tb`;
+      case "booking":
+        return `SELECT * FROM booking_tb`;
+      default:
+        return "Table has not registered yet";
+    }
+  }
+  // queryGetSQL
+  commandInsertSQL(table) {
+    switch (table) {
+      case "produk":
+        return `INSERT INTO product_tb(nama,harga,deskripsi) VALUES($1,$2,$3)`;
+      case "user":
+        return "INSERT INTO user_tb(user_id,nama,email,no_hp,password,role) VALUES($1,$2,$3,$4,$5,$6)";
+      default:
+        return "Table has not registered yet";
+    }
+  }
 }
+const util = new Utils();
 module.exports = {
-  Utils,
+  util,
   apiConstants,
   DB_ENVIRONMENT,
 };

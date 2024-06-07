@@ -37,17 +37,16 @@ class Auth {
     }
     try {
       const tokenGenerator = new TokenGenerator({ email: user[0].email });
-
       var response = await tokenGenerator.getAuthToken();
+
       return response;
     } catch (error) {
-      throw new ErrorHandler.ServerError();
+      throw new ErrorHandler.ServerError(error);
     }
   }
   async logout(req, res) {
-    const { email, password } = req.body;
-    var user = await queryHandler.findUserByEmail(req.body);
-    
+    res.clearCookie("token");
+    // req.logout();
   }
   async refreshToken(req, res) {
     const { token, email } = req.body;
