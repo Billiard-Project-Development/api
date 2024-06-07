@@ -14,12 +14,12 @@ class ProdukQueryHandler {
       text: `SELECT a.product_id,a.nama,a.deskripsi FROM product_tb a JOIN(SELECT * FROM booking_tb b WHERE b.tanggal_booking LIKE $1)b ON b.product_id <> a.product_id`,
       values: [params.tanggal],
     };
-    var response;
+    var responses;
 
     await this.db.db
       .query(sql)
       .then((a) => {
-        response = a.rows;
+        responses = a.rows;
       })
       .catch((e) => {
         throw new ErrorHandler.ServerError(e);
