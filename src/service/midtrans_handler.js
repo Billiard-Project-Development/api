@@ -1,6 +1,6 @@
 const fetch = require("node-fetch");
-const { Utils, apiConstants } = require("../utils");
-const util = new Utils();
+const axios = require("axios").default;
+const { util, apiConstants } = require("../utils");
 const midtransClient = require("midtrans-client");
 const url = "https://api.sandbox.midtrans.com/v2/charge";
 class MidtransClient {
@@ -24,6 +24,7 @@ class MidtransClient {
       this.user,
       this.product
     );
+
     return await this.snap.createTransaction(options);
   }
   async createTransactionAPIPrefrene() {
@@ -38,7 +39,7 @@ class MidtransClient {
       this.product,
       "POST"
     );
-    const response = await fetch(url, options);
+    const response = await axios.get(url);
     const dataTransaksi = await response.json();
   }
   async getTransactionStatus() {

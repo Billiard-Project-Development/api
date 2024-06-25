@@ -18,17 +18,25 @@ class TokenGenerator {
     const accessToken = await this.generateAccessToken();
     const refreshToken = await this.generateRefreshToken();
 
-    let accessTokenExpDate = new Date(Date.now());
-    accessTokenExpDate.setHours(accessTokenExpDate.getHours() + 1);
-    let refreshTokenExpDate = new Date(Date.now());
-    refreshTokenExpDate.setHours(refreshTokenExpDate.getHours() + 3);
+    const accessTokenExpDate = new Date();
+    accessTokenExpDate.setHours(
+      accessTokenExpDate.getHours() + 1,
+      accessTokenExpDate.getMinutes(),
+      accessTokenExpDate.getSeconds()
+    );
+    const refreshTokenExpDate = new Date();
+    refreshTokenExpDate.setHours(
+      refreshTokenExpDate.getHours() + 3,
+      refreshTokenExpDate.getMinutes(),
+      refreshTokenExpDate.getSeconds()
+    );
 
     const response = {
       tokenType: "Bearer",
       accessToken: accessToken,
-      accessTokenExpDate: Date(accessTokenExpDate),
+      accessTokenExpDate: accessTokenExpDate.toString(),
       refreshToken: refreshToken,
-      refreshTokenExpDate: refreshTokenExpDate,
+      refreshTokenExpDate: refreshTokenExpDate.toString(),
     };
 
     return response;

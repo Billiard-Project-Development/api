@@ -4,11 +4,11 @@ const MidtransClient = require("../../../../service/midtrans_handler");
 const { util } = require("../../../../utils");
 const BookingQuery = require("./query");
 
-class BookingQueryHandler {
+class TransaksiQueryHandler {
   constructor() {
     this.db = new DB();
   }
-  async getAllBookingList() {
+  async getAllTransaksiList() {
     try {
       const sql = util.queryGetAllSQL("booking");
       const query = new BookingQuery(this.db.db, sql);
@@ -41,4 +41,4 @@ class BookingQueryHandler {
     }
   }
 }
-module.exports = BookingQueryHandler;
+module.exports = TransaksiQueryHandler;
