@@ -13,7 +13,6 @@ module.exports = (app) => {
       var response = await auth.login(req, res);
 
       util.response(res, response, "Success", 200, true);
-      next();
     } catch (error) {
       util.handleError(req, res, error);
     }

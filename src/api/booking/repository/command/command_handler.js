@@ -2,7 +2,6 @@ const { DB } = require("../../../../config/db");
 const { ErrorHandler } = require("../../../../handler/error");
 const UserQueryHandler = require("../../../user/repository/query/query_handler");
 const BookingCommandModel = require("./command_model");
-const MidtransClient = require("../../../../service/midtrans_handler");
 const BookingCommand = require("./command");
 const model = new BookingCommandModel();
 
@@ -12,58 +11,37 @@ class BookingCommandHandler {
   }
 
   async createBooking(body) {
-    const { email, product, price, date } = body;
-    const { error } = model.validate(body);
-    const userhandler = new UserQueryHandler();
-    const user = await userhandler.findUserByEmail(body);
-    if (error) {
-      throw new ErrorHandler.BadRequestError(error);
-    }
+    const { order_id, lamaSewa, userId, produkId, tanggalBooking } = body;
+    // // const { error } = model.validate(body);
+    // const userhandler = new UserQueryHandler();
+    // const user = await userhandler.findUserByEmail(body);
+    // // if (error) {
+    // //   throw new ErrorHandler.BadRequestError(error);
+    // // }
+    // var price = 0;
 
-    if (!user) {
+    // for (let i = 0; i < produkList.length; i++) {
+    //   price += produkList[i].harga;
+    // }
+    if (!userId) {
       throw new ErrorHandler.ForbiddenError();
     }
     try {
-      const midtrans = new MidtransClient(
-        "Order-123-iko",
-        price,
-        "gopay",
-        user[0],
-        product
-      );
-      var status;
-      var response = await midtrans
-        .createTransactionSnapPrefrence()
-        .then(async (val) => {
-          status = await midtrans.getTransactionStatus();
-        });
-
-      console.log(status);
-      var sql = {
-        text: "INSERT INTO public.transaction_tb(transaction_id, user_id, tanggal_transaction, product, total_price, status_transaction)  VALUES ($1, $2, $3, $4, $5, $6)",
-        values: [
-          midtrans.order_id,
-          user[0].user_id,
-          Date(Date.now().toLocaleString()).split("GMT").first,
-          [product],
-          price,
-          status,
-        ],
+      const sql = {
+        text: `INSERT INTO booking_tb (booking_id, total_lama_sewa, user_id, product_id, tanggal_booking) VALUES ($1, $2, $3, $4, $5)`,
+        values: [order_id, lamaSewa, userId, produkId, tanggalBooking],
       };
       const command = new BookingCommand(this.db.db, sql);
       await command.create();
 
       return {
         res: {
-          order_id: midtrans.order_id,
-          email: user[0].email,
-          date_transaction: Date(Date.now().toLocaleString()).split("GMT")
-            .first,
-          product: [product],
-          total_price: price,
-          status: status,
+          orderId: order_id,
+          lamaSewa: lamaSewa,
+          userId: userId,
+          produkId: produkId,
+          tanggalBooking: tanggalBooking,
         },
-        response,
       };
     } catch (error) {
       throw new ErrorHandler.ServerError(error);
@@ -102,7 +80,7 @@ class BookingCommandHandler {
 
     const response = await fetch(url, options);
     const dataTransaksi = await response.json();
-    console.log(dataTransaksi);
+
     if (dataTransaksi.status_code != 201) {
       throw new ErrorHandler.BadRequestError();
     }

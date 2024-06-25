@@ -10,6 +10,7 @@ const apiConstants = {
   TOKEN_SECRET: {
     ACCESS_TOKEN: process.env.ACCESS_TOKEN_SECRET,
     REFRESH_TOKEN: process.env.REFRESH_TOKEN_SECRET,
+    SESSION_SECRET: process.env.SESSION_SECRET,
   },
   METHOD_TYPE: {
     POST: "POST",
@@ -73,6 +74,7 @@ const DB_ENVIRONMENT = {
   DB_PASS: process.env.POSTGRE_PASSWORD,
   DB_DATABASE: process.env.POSTGRE_DATABASE,
   DB_PORT: process.env.POSTGRE_PORT,
+  DB_SSL: process.env.POSTGRE_SSL,
 };
 module.exports = {
   apiConstants,

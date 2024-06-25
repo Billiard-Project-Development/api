@@ -1,20 +1,10 @@
 const { ErrorHandler } = require("../handler/error");
 const { apiConstants, util } = require("../utils");
 const jwt = require("jsonwebtoken");
-exports.isAuthentication = (req, res, next, app) => {
-  app.use(
-    session({
-      secret: "Just a simple login/sign up application.",
-      resave: true,
-      saveUninitialized: true,
-    })
-  );
-  passport.use(
-    new LocalStrategy({ usernameField: "email" }, User.authenticate())
-  );
-  passport.serializeUser(User.serializeUser());
-  passport.deserializeUser(User.deserializeUser());
-};
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+require("express-session");
+exports.isAuthentication = (req, res, next, app) => {};
 exports.authenticateToken = (req, res, next) => {
   if (!req.headers["authorization"]) {
     util.handleError(req, res, new ErrorHandler.ForbiddenError());

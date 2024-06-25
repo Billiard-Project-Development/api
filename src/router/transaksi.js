@@ -2,23 +2,23 @@ const { util, apiConstants } = require("../utils/index");
 const { ErrorHandler } = require("../handler/error");
 const bodyParser = require("body-parser");
 const { authenticateToken } = require("../middleware/authentication");
-const BookingCommandHandler = require("../api/booking/repository/command/command_handler");
-const BookingQueryHandler = require("../api/booking/repository/query/query_handler");
-const commandHandler = new BookingCommandHandler();
-const queryHandler = new BookingQueryHandler();
+const TransaksiCommandHandler = require("../api/transaksi/repository/command/command_handler");
+const TransaksiQueryHandler = require("../api/transaksi/repository/query/query_handler");
+const commandHandler = new TransaksiCommandHandler();
+const queryHandler = new TransaksiQueryHandler();
 module.exports = (app) => {
   app.use(bodyParser.json());
-  app.get("/v1/booking/getAll", authenticateToken, async (req, res) => {
+  app.get("/v1/transaksi/getAll", authenticateToken, async (req, res) => {
     try {
-      var response = await queryHandler.getAllBookingList();
+      var response = await queryHandler.getAllTransaksiList();
       util.response(res, response, "Success", 200, true);
     } catch (error) {
       util.handleError(req, res, error);
     }
   });
-  app.post("/v1/booking/createBook", authenticateToken, async (req, res) => {
+  app.post("/v1/transaksi/createTransaksi", authenticateToken, async (req, res) => {
     try {
-      var response = await commandHandler.createBooking(req.body);
+      var response = await commandHandler.createTransaksi(req.body);
 
       util.response(res, response, "Success", 200, true);
     } catch (error) {
@@ -26,7 +26,7 @@ module.exports = (app) => {
     }
   });
   app.get(
-    "/v1/booking/getItemById/:orderId",
+    "/v1/transaksi/getItemById/:orderId",
     authenticateToken,
     async (req, res) => {
       try {
@@ -40,7 +40,7 @@ module.exports = (app) => {
     }
   );
   app.get(
-    "/v1/booking/getStatus/:order_id",
+    "/v1/transaksi/getStatus/:order_id",
     authenticateToken,
     async (req, res) => {
       try {

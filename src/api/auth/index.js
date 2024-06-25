@@ -7,6 +7,8 @@ const commandHandler = new CommandHandler();
 const { ErrorHandler } = require("../../handler/error");
 const { apiConstants } = require("../../utils/index");
 const TokenGenerator = require("./jwt_token");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
 
 class Auth {
   constructor() {}
@@ -39,6 +41,20 @@ class Auth {
       const tokenGenerator = new TokenGenerator({ email: user[0].email });
       var response = await tokenGenerator.getAuthToken();
 
+      passport.use(
+        new LocalStrategy(
+          { emailField: "email", tokenField: "token" },
+          function (users, done) {
+            done(null, users);
+          }
+        )
+      );
+      // passport.serializeUser((user, done) => {
+      //   done(null, false);
+      // });
+      // passport.deserializeUser((user, done) => {
+      //   done(null, user);
+      // });
       return response;
     } catch (error) {
       throw new ErrorHandler.ServerError(error);
