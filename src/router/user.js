@@ -6,7 +6,6 @@ const commandHandler = new CommandHandler();
 const bodyParser = require("body-parser");
 const authenticator = require("../middleware/authentication");
 const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
 
 module.exports = (app) => {
   app.use(bodyParser.json());
@@ -31,8 +30,7 @@ module.exports = (app) => {
   );
   app.get(
     "/v1/user/search",
-    passport.authenticate("local", { session: false }),
-    // authenticator.authenticateToken,
+    authenticator.authenticateToken,
     async (req, res) => {
       const params = req.query;
       try {

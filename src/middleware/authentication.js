@@ -1,8 +1,7 @@
 const { ErrorHandler } = require("../handler/error");
 const { apiConstants, util } = require("../utils");
 const jwt = require("jsonwebtoken");
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
+
 require("express-session");
 exports.isAuthentication = (req, res, next, app) => {};
 exports.authenticateToken = (req, res, next) => {

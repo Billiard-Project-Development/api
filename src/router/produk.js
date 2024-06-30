@@ -24,7 +24,6 @@ module.exports = (app) => {
   });
   app.get(
     "/v1/product/getAllAvailable",
-
     authenticateToken,
     async (req, res) => {
       try {
